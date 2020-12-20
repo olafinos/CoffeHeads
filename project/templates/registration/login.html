@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<center>
+<h2>Log In</h2>
+  </center>
+</br>
+<form method="post">
+   {% csrf_token %}
+     {% if form.errors %}
+    <!-- Error messaging -->
+   <br>
+    <div id="errors">
+        <div class="inner">
+          <strong>
+            <p>There were some errors in the information you entered. Please correct the following:</p>
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}
+              <li>{{ field.label }}:
+              <ul>
+                {% for error in field.errors %}
+                <li>{{ error|striptags }}</li>
+                {% endfor %}
+              </ul>
+            </li>
+              {% endif %}
+                {% endfor %}
+            </ul>
+            </strong>
+        </div>
+    </div>
+    <br>
+    <!-- /Error messaging -->
+    {% endif %}
+<div class="form-group">
+    <input type="text" class="form-control" aria-describedby="emailHelp" name="username" placeholder="Username">
+  </div>
+  <div class="form-group">
+    <input type="password" class="form-control" name="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-dark">Submit</button>
+</form>
+<br/><br/>
+
+Not registered ? Sign up <a href="{% url 'signup' %}" class="text-muted">here</a>
+{% endblock %}

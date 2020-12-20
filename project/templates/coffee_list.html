@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Coffee List{% endblock %}
+{% block content %}
+<h2>Coffee List</h2>
+<label><strong>Sort order:</strong></label>
+<div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{ ordering }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=name">Alphabetical A-Z</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=-name">Alphabetical Z-A</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=average">Average ascending</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=-average">Average descending</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=reviewed_by">Popularity ascending</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=-reviewed_by">Popularity descending</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=estimated_price">Price ascending</a>
+        <a class="dropdown-item" href="{% url 'coffee_list' %}?ordering=-estimated_price">Price descending</a>
+    </div>
+  </div>
+
+{% for coffee in object_list %}
+    <div class="container p-3 my-3" style="border:2px solid #38220f;">
+        <a href="{% url 'add_user_coffee' coffee.pk %}" class='btn btn-dark float-right'>
+        Add coffee
+          </a>
+        <div class="media">
+        <img src={{ coffee.image.url }} class="align-self-start mr-3" style=" border:2px solid #38220f;width:130px;height:130px"/>
+   <div class="media-body">
+       <h4 class="mt-0"><a href="{% url 'coffee_detail' coffee.pk %}" class="text-muted" >{{ coffee.name }}</a></h4>
+       <h6 class="mt-0"><strong>Origin: </strong>{{ coffee.origin }}</h6>
+       <h6 class="mt-0"><strong>Manufacturer: </strong>{{ coffee.manufacturer }}</h6>
+       <h6 class="mt-0"><strong>Estimated price: </strong>{{ coffee.estimated_price }}$/kg</h6>
+       <h6 class="mt-0"><strong>Average rating: </strong>{{ coffee.average|floatformat:-2  }} with {{ coffee.reviewed_by }} reviews</h6>
+    <p><strong>Description: </strong>{{ coffee.description }}</p>
+  </div>
+    </div>
+    </div>
+{% endfor %}
+{% endblock %}

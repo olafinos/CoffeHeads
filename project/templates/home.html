@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Coffee Heads{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container-fluid">
+    <center><h1 class="display-4">Recently added coffees</h1></center>
+    <br><br>
+    <div class="container-fluid">
+        <div class="row">
+            {% for coffee in recent_coffees %}
+            <div class="col-md">
+                <div class="container-lg p-3 my-3 " style="border:2px solid #38220f;">
+                    <div class="media">
+                        <img src={{ coffee.image.url }} class="align-self-start mr-3" style="border:2px solid #38220f;width:130px;height:130px"/>
+                        <div class="media-body">
+                            <center><h4 class="mt-0"><a href="{% url 'coffee_detail' coffee.pk %}" class="text-muted">{{ coffee.name }}</a></h4></center>
+                            <h6 class="mt-0"><strong>Origin: </strong>{{ coffee.origin }}</h6>
+                            <h6 class="mt-0"><strong>Manufacturer: </strong>{{ coffee.manufacturer }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <center><h1 class="display-4">Users top coffees</h1></center>
+        <div class="container-fluid">
+        <div class="row">
+            {% for coffee in top_coffees %}
+            <div class="col-md">
+                <div class="container p-3 my-3" style="border:2px solid #38220f;">
+                    <div class="media">
+                        <img src={{ coffee.image.url }} class="align-self-start mr-3" style="border:2px solid #38220f;width:130px;height:130px"/>
+                        <div class="media-body">
+                            <center><h4 class="mt-0"><a href="{% url 'coffee_detail' coffee.pk %}" class="text-muted">{{ coffee.name }}</a></h4></center>
+                            <h6 class="mt-0"><strong>User average: </strong>{{ coffee.average|floatformat:-2 }}</h6>
+                            <h6 class="mt-0"><strong>Reviewed by: </strong>{{ coffee.reviewed_by }} users</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container-fluid text-center">
+    <h1 class="display-4">Welcome to</h1>
+    <img src="/static/image/Logo.png" style="width:532px;height:480px">
+    <h3>Place where you can share your coffee experiences with other people.</h3>
+    <h3>Try it out and <a href="{% url 'signup' %}" class="text-muted">create free account</a>.</h3>
+</div>
+{% endif %}
+{% endblock %}

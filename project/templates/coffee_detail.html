@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ coffee.name }}{% endblock %}
+{% block content %}
+<h2>Coffee Detail</h2>
+    <div class="container p-3 my-3" style="border:2px solid #38220f;">
+        <div class="media">
+        <img src={{ coffee.image.url }} class="align-self-start mr-3" style="width:130px;height:130px"/>
+   <div class="media-body">
+       <h4 class="mt-0">{{ coffee.name }}</h4>
+       <h6 class="mt-0"><strong>Origin: </strong>{{ coffee.origin }}</h6>
+       <h6 class="mt-0"><strong>Manufacturer: </strong>{{ coffee.manufacturer }}</h6>
+       <h6 class="mt-0"><strong>Estimated price: </strong>{{ coffee.estimated_price }}$/kg</h6>
+       <h6 class="mt-0"><strong>Average rating: </strong>{{ coffee.average|floatformat:-2  }} with {{ coffee.reviewed_by }} reviews</h6>
+    <p><strong>Description: </strong>{{ coffee.description }}</p>
+  </div>
+    </div>
+    </div>
+ <h3>Coffee Opinions:</h3>
+    {% if coffee_opinions %}
+       {% for opinion in coffee_opinions %}
+<div class="container p-3 my-3" style=" border:2px solid #38220f;">
+        <div class="media">
+            <div class="media-body">
+                <h6 class="mt-0"><strong>User: </strong><a href="{% url 'user_coffee_list' pk=opinion.user.pk %}">{{ opinion.user }}</a></h6>
+                <h6 class="mt-0"><strong>Rating: </strong>{{ opinion.rating }}</h6>
+                <h6 class="mt-0"><strong>Acidity: </strong>{{ opinion.acidity }}</h6>
+                <h6 class="mt-0"><strong>Body: </strong>{{ opinion.body }}</h6>
+                <h6 class="mt-0"><strong>Flavor: </strong>{{ opinion.flavor }}</h6>
+                <h6 class="mt-0"><strong>Bitterness: </strong>{{ opinion.bitterness }}</h6>
+
+                <p><strong>Opinion description: </strong>{{ opinion.opinion }}</p>
+  </div>
+    </div>
+    </div>
+           {% endfor %}
+    {% else %}
+        <p>There are no opinions for this coffee</p>
+    {% endif %}
+{% endblock %}

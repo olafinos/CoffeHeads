@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Top users{% endblock %}
+{% block content %}
+<h2>Top 10 users</h2>
+{% for user_opinion in opinions %}
+<div class="container p-3 my-3" style="border:2px solid #38220f;">
+    <div class="row">
+        <div class="col-md">
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="mt-0"><a href="{% url 'user_coffee_list' pk=user_opinion.owner %}" class="text-muted">{{ user_opinion.username }}</a></h4>
+                    <h5 class="mt-0"><strong>Number of coffees opinions: </strong>{{ user_opinion.count }}</h5>
+                    <h5 class="mt-0"><strong>Top rated coffee: </strong><a href="{% url 'coffee_detail' pk=user_opinion.top_rated_coffee.coffee_id %}" class="text-muted">{{ user_opinion.top_rated_coffee.coffee_name }}</a> ({{ user_opinion.top_rated_coffee.rating }}) </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

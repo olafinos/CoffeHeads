@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Your coffee list{% endblock %}
+{% block content %}
+<h1>{{ user_info.username }} </h1>
+<br>
+<h2>Coffee history</h2>
+{% for coffee in user_coffees %}
+<div class="container p-3 my-3" style="border:2px solid #38220f;">
+    <div class="row">
+        <div class="col-md">
+            <div class="media">
+                <img src={{ coffee.coffee.image.url }} class="align-self-start mr-3"
+                     style="border:2px solid #38220f;width:130px;height:130px"/>
+                <div class="media-body">
+                    <h4 class="mt-0"><a href="{% url 'user_coffee_detail' coffee.pk %}" class="text-muted">{{ coffee.coffee.name }}</a></h4>
+                    <h6 class="mt-0"><strong>Your rate: </strong>{{ coffee.opinion.rating|floatformat:-2  }}</h6>
+                    <h6 class="mt-0"><strong>Body: </strong>{{ coffee.opinion.body }}</h6>
+                    <h6 class="mt-0"><strong>Acidity: </strong>{{ coffee.opinion.acidity }}</h6>
+                    <h6 class="mt-0"><strong>Flavor: </strong>{{ coffee.opinion.flavor }}</h6>
+                    <h6 class="mt-0"><strong>Bitterness: </strong>{{ coffee.opinion.bitterness }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <span class="float-right"><strong>Opinion descritption: </strong>{{ coffee.opinion.opinion }}</span>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

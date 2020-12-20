@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ user_coffee.coffee.name }}{% endblock %}
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+    {% if message.tags %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endif %}
+    <div class="container p-3 my-3 " style="border:2px solid #38220f;">
+        <div class="media">
+        <img src={{ user_coffee.coffee.image.url }} class="align-self-start mr-3" style="border:2px solid #38220f;width:130px;height:130px"/>
+   <div class="media-body">
+       <h4 class="mt-0"><a href="{% url 'coffee_detail' user_coffee.pk %}" >{{ user_coffee.name }}</a></h4>
+       <h6 class="mt-0"><strong>Origin: </strong>{{ user_coffee.coffee.origin }}</h6>
+       <h6 class="mt-0"><strong>Manufacturer: </strong>{{ user_coffee.coffee.manufacturer }}</h6>
+       <h6 class="mt-0"><strong>Average: </strong>{{ user_coffee.coffee.average|floatformat:-2  }}</h6>
+    <p><strong>Description: </strong>{{ user_coffee.coffee.description }}</p>
+  </div>
+    </div>
+    </div>
+<h3>Your Opinion:</h3>
+<div class="container p-3 my-3 " style="border:2px solid #38220f;">
+        <div class="media">
+            <div class="media-body">
+                <h6 class="mt-0"><strong>Rating: </strong>{{ coffee_opinion.rating|floatformat:-2  }}</h6>
+                <h6 class="mt-0"><strong>Acidity: </strong>{{ coffee_opinion.acidity }}</h6>
+                <h6 class="mt-0"><strong>Body: </strong>{{ coffee_opinion.body }}</h6>
+                <h6 class="mt-0"><strong>Flavor: </strong>{{ coffee_opinion.flavor }}</h6>
+                <h6 class="mt-0"><strong>Bitterness: </strong>{{ coffee_opinion.bitterness }}</h6>
+                <p><strong>Opinion description: </strong>{{ coffee_opinion.opinion }}</p>
+  </div>
+    </div>
+    </div>
+{% endblock %}
