@@ -29,7 +29,7 @@ SECRET_KEY = "p%fsux449&h83)6ac8rju%nnp5_uypqpe+6oqa%g#tiv*1$-^_"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["coffeeheads.herokuapp.com", '127.0.0.1']
 
 
 # Application definition
@@ -82,11 +82,15 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "coffeeheads_db",
+        "USER": "coffeeheads_db_user",
+        "PASSWORD": "db_pass"
     }
 }
-
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES["default"].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
