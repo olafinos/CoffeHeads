@@ -1,8 +1,9 @@
 import os
 import sys
 import random
-sys.path.insert(0,r"C:\Users\Bunia1337\PycharmProjects\ProjektZespolowy\CoffeeHeads\project")
-print(sys.path)
+SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
+PROJECT_PATH = os.path.split(SCRIPT_PATH)[0]
+sys.path.insert(0,PROJECT_PATH)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','mysite.settings')
 import django
 django.setup()
@@ -35,7 +36,7 @@ def create_coffees(origin, manufacture, description, number_of_items):
     :param description: List with descriptions
     :param number_of_items: Number of coffees which will be created
     """
-    absolute_path = r"C:\Users\Bunia1337\PycharmProjects\ProjektZespolowy\CoffeeHeads\project\media\img"
+    absolute_path = os.path.join(PROJECT_PATH,'media','img')
     images_paths = os.listdir(absolute_path)
     for _ in range(number_of_items):
         rand_origin = random.choice(origin)
