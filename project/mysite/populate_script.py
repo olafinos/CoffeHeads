@@ -47,6 +47,7 @@ def create_coffees(origin, manufacture, description, number_of_items):
         name = f"{rand_manu} {rand_origin}"
         c = Coffee(name=name,origin=rand_origin,manufacturer=rand_manu,description=rand_desc,estimated_price=price,image=rand_image_path)
         c.save()
+    return images_paths
 
 def create_users(usernames,opinions):
     """
@@ -76,5 +77,6 @@ def create_users(usernames,opinions):
             AddUserCoffee.update_average(coffee=coffee)
 
 if __name__ == '__main__':
-    create_coffees(ORIGIN,MANUFACTURE,DESCRIPTION,35)
+    images = create_coffees(ORIGIN,MANUFACTURE,DESCRIPTION,35)
     create_users(USERNAMES,OPINIONS)
+    print(images)
