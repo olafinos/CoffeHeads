@@ -42,7 +42,7 @@ def create_coffees(origin, manufacture, description, number_of_items):
         rand_origin = random.choice(origin)
         rand_manu = random.choice(manufacture)
         rand_desc = random.choice(description)
-        rand_image_path = os.path.join(absolute_path, random.choice(images_paths))
+        rand_image_path = os.path.join('img', random.choice(images_paths))
         price = float("{:.2f}".format(random.uniform(15,30)))
         name = f"{rand_manu} {rand_origin}"
         c = Coffee(name=name,origin=rand_origin,manufacturer=rand_manu,description=rand_desc,estimated_price=price,image=rand_image_path)
@@ -79,4 +79,3 @@ def create_users(usernames,opinions):
 if __name__ == '__main__':
     images = create_coffees(ORIGIN,MANUFACTURE,DESCRIPTION,35)
     create_users(USERNAMES,OPINIONS)
-    print(images)
