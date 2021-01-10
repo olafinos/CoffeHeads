@@ -68,7 +68,7 @@ class AddUserCoffee(View):
             opinion.user = user
             opinion.save()
             user_coffee = self.create_user_coffee(coffee, request.user, opinion)
-            self._update_average(coffee)
+            self.update_average(coffee)
         else:
             return render(request, "add_user_coffee.html", {'form': form})
         messages.add_message(request,messages.SUCCESS, "Coffee successfully added to history")
@@ -80,7 +80,7 @@ class AddUserCoffee(View):
         return user_coffee
 
     @staticmethod
-    def _update_average(coffee):
+    def update_average(coffee):
         opinions = Opinion.objects.filter(coffee=coffee)
         coffee = Coffee.objects.get(pk=coffee.pk)
         average_rating = opinions.aggregate(Avg('rating'))

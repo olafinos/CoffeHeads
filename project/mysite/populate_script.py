@@ -8,14 +8,14 @@ import django
 django.setup()
 from django.contrib.auth.models import User
 from coffeeheads.models import Coffee, Opinion, UserCoffee
-from coffeeheads.views import AddUserCoffee
+from coffeeheads.views.AddUserCoffee import update_average
 
 ORIGIN = ['Gwatemala','Peru','Brazil','Honduras','Mexico','Argentina','Costa Rica',"Etiopia","Salwador",'Trinidad & Tobago',"India","Tanzania"]
 MANUFACTURE = ["Duka", "Early Bird", "HAYB", "Grano", "Blueberry Roasters", "Hard Beans"]
 DESCRIPTION = ["This coffee is our most complex in terms of blend makeup and contains a range of origins, varietals, and processing methods. Supreme displays a full-bodied richness, a crisp, cradling acidity, and lingering cocoa finish. ", "A blend of several excellent, roasted medium-dark to give a milk chocolate cup, a smooth silky body and a long finish. Lower in acidity, this Blend makes plush espresso and mixes well in milk drinks.",
                "Blend designed with the espresso drinker in mind. With its distinctive dark chocolate notes, full body and pleasant finish, this blend makes gutsy milk drinks, and hefty espresso.","A fully washed Arabica, one of the first “new world” homes of coffee. Our Mt. Raung Java has a heavy, creamy body, a soft cradling acidity and pleasant sweetness. It has a familiar earthy complexity but is delivered very cleanly, with toast and baker’s chocolate notes to boot."
                ,"This washed espresso delivers all the great characteristics we know and love about coffee. Expect a perfumed citrus aroma with sweet fruit tones, a silky chocolate body and a refreshing lime marmalade finish."]
-USER_NAMES = ["Bob1337","Andrzejek","Ricardo232","Carl432","JoshuaxCoff","TruniaGrunia","BuniaMischigan","PotHead","MichelAngelo132"]
+USERNAMES = ["Bob1337","Andrzejek","Ricardo232","Carl432","JoshuaxCoff","TruniaGrunia","BuniaMischigan","PotHead","MichelAngelo132"]
 OPINIONS = ["The coffee is delicate, not too acidic, the espresso I brew from it is good, although you don't feel the strength of the coffee, which may be an obstacle for some.",
             "The coffee is very tasty, mild, without acidity. Strong but mild in flavor. We brew in an automatic pressure grinding machine, the coffee has a delicate foam.",
             "A uniquely structured naturally processed coffee that delivers sweet-tart, fruit-centered richness, juicy-bright acidity, vibrantly viscous mouthfeel. An intricately layered roller coaster of sensory pleasures.",
@@ -28,6 +28,13 @@ OPINIONS = ["The coffee is delicate, not too acidic, the espresso I brew from it
             "Delicate, tropical, fruity and floral. Strawberry guava, bergamot, cocoa nib, sandalwood, plumeria in aroma and cup. Sweet-toned structure with juicy, vibrant acidity; silky, buoyant mouthfeel. Resonant, flavor-saturated, very long finish.",
             "Deep, intense, sweet-savory, utterly coherent. Intense lavender, black currant, mandarin orange, sandalwood, dark chocolate in aroma and cup. Sweet, tart, savory-bottomed structure with intense, balanced acidity; big, mouth-filling body. The flavor-saturated finish carries over every nuance from the cup."]
 def create_coffees(origin, manufacture, description, number_of_items):
+    """
+    Creates random coffees from given lists with possible names.
+    :param origin: List with origins
+    :param manufacture: List with manufactures
+    :param description: List with descriptions
+    :param number_of_items: Number of coffees which will be created
+    """
     absolute_path = r"C:\Users\Bunia1337\PycharmProjects\ProjektZespolowy\CoffeeHeads\project\media\img"
     images_paths = os.listdir(absolute_path)
     for _ in range(number_of_items):
@@ -41,6 +48,11 @@ def create_coffees(origin, manufacture, description, number_of_items):
         c.save()
 
 def create_users(usernames,opinions):
+    """
+    Creates users with their random coffee history and opinions
+    :param usernames: List of usernames
+    :param opinions: List with possible opinions
+    """
     for username in usernames:
         email = f"{username}@mail.com"
         password = "Password123"
@@ -60,4 +72,8 @@ def create_users(usernames,opinions):
             opinion.save()
             user_coffe = UserCoffee(owner=user,coffee=coffee,opinion=opinion)
             user_coffe.save()
-            _update_average(coffee=coffee)
+            update_average(coffee=coffee)
+
+if __name__ == '__main__':
+    create_coffees(ORIGIN,MANUFACTURE,DESCRIPTION,35)
+    create_users(USERNAMES,OPINIONS)
