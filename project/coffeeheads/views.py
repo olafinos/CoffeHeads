@@ -1,19 +1,20 @@
 from .forms import OpinionForm
 from .models import Coffee, UserCoffee, Opinion
-from typing import List
-from django.core.exceptions import ValidationError
+from typing import Union
 from django.shortcuts import render, redirect
-from django.db.models import Avg, Count, Max
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.views.generic import View, ListView, DetailView
+from django.db.models import Avg, Count
+from django.http import HttpRequest, HttpResponse
+from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-import datetime
 
 
 class HomeView(View):
+    """
+    View responsible for displaying home page. It also shows recently added coffees and the highest rated coffees.
+    """
     def get(self, request: HttpRequest, format=None) -> HttpResponse:
         recent_coffees = Coffee.objects.filter().order_by('-add_date')[:3]
         top_coffees = Coffee.objects.filter().order_by('-average')[:3]
@@ -23,6 +24,9 @@ class HomeView(View):
 
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
 class UserCoffeeHistoryList(ListView):
+    """
+    View responsible for listing user coffee history.
+    """
     def get(self, request: HttpRequest, pk, format=None) -> HttpResponse:
         user = User.objects.get(pk=pk)
         user_coffees = UserCoffee.objects.filter(owner = user)
@@ -32,13 +36,16 @@ class UserCoffeeHistoryList(ListView):
 
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
 class UserCoffeeHistoryDetail(View):
+    """
+    View responsible for displaying details about specified coffee from user history
+    """
     def get(self, request: HttpRequest, pk, format=None) -> HttpResponse:
         user_coffee = UserCoffee.objects.get(pk=pk, owner=request.user)
         coffee_opinion = self._get_opinion(user_coffee.coffee, request.user)
         context = {"user_coffee": user_coffee, "coffee_opinion": coffee_opinion}
         return render(request, "user_coffee_detail.html", context=context)
 
-    def _get_opinion(self, coffee: Coffee, user: "User"):
+    def _get_opinion(self, coffee: Coffee, user: "User") -> Union[Opinion, None]:
         try:
             coffee_opinions = Opinion.objects.get(user =user, coffee = coffee)
         except Opinion.DoesNotExist:
@@ -49,6 +56,9 @@ class UserCoffeeHistoryDetail(View):
 
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
 class AddUserCoffee(View):
+    """
+    View responsible for handling request for adding coffee to user history
+    """
     def get(self, request: HttpRequest, pk, format=None) -> HttpResponse:
         form = OpinionForm()
         return render(request, "add_user_coffee.html", {"form": form, "exists": False})
@@ -88,6 +98,9 @@ class AddUserCoffee(View):
         coffee.save()
 
 class CoffeeDetail(View):
+    """
+    View responsible for displaying details about specified coffee
+    """
     def get(self, request: HttpRequest, pk, format=None) -> HttpResponse:
         coffee = Coffee.objects.get(pk=pk)
         coffee_opinions = self._get_opinions(coffee)
@@ -104,6 +117,9 @@ class CoffeeDetail(View):
 
 
 class CoffeeList(ListView):
+    """
+    View responsible for listing coffees. It allows to change order of listed objects.
+    """
     model = Coffee
     paginate_by = 20
     template_name = "coffee_list.html"
@@ -130,6 +146,9 @@ class CoffeeList(ListView):
         return context
 
 class TopUsersView(View):
+    """
+    View displays ten users which added the most opinions.
+    """
     def get(self, request, format=None):
         top_users = UserCoffee.objects.values('owner').annotate(count=Count('owner')).order_by('-count')[:10]
         for user in top_users:
