@@ -33,7 +33,6 @@ class UserCoffeeHistoryList(ListView):
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
 class UserCoffeeHistoryDetail(View):
     def get(self, request: HttpRequest, pk, format=None) -> HttpResponse:
-        # storage = messages.get_messages(request)
         user_coffee = UserCoffee.objects.get(pk=pk, owner=request.user)
         coffee_opinion = self._get_opinion(user_coffee.coffee, request.user)
         context = {"user_coffee": user_coffee, "coffee_opinion": coffee_opinion}
@@ -134,12 +133,12 @@ class TopUsersView(View):
     def get(self, request, format=None):
         top_users = UserCoffee.objects.values('owner').annotate(count=Count('owner')).order_by('-count')[:10]
         for user in top_users:
-            user['username'] = self._add_username(user_id=user['owner'])
+            user['username'] = self._get_username(user_id=user['owner'])
             user['top_rated_coffee'] = self._get_top_rated_coffee(user_id=user['owner'])
         context = {"opinions": top_users}
         return render(request, "top_users.html", context=context)
 
-    def _add_username(self, user_id: int):
+    def _get_username(self, user_id: int):
         return User.objects.get(pk=user_id).username
 
     def _get_top_rated_coffee(self,user_id: int):
