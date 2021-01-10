@@ -8,7 +8,7 @@ import django
 django.setup()
 from django.contrib.auth.models import User
 from coffeeheads.models import Coffee, Opinion, UserCoffee
-from coffeeheads.views.AddUserCoffee import update_average
+from coffeeheads.views import AddUserCoffee
 
 ORIGIN = ['Gwatemala','Peru','Brazil','Honduras','Mexico','Argentina','Costa Rica',"Etiopia","Salwador",'Trinidad & Tobago',"India","Tanzania"]
 MANUFACTURE = ["Duka", "Early Bird", "HAYB", "Grano", "Blueberry Roasters", "Hard Beans"]
@@ -72,7 +72,7 @@ def create_users(usernames,opinions):
             opinion.save()
             user_coffe = UserCoffee(owner=user,coffee=coffee,opinion=opinion)
             user_coffe.save()
-            update_average(coffee=coffee)
+            AddUserCoffee.update_average(coffee=coffee)
 
 if __name__ == '__main__':
     create_coffees(ORIGIN,MANUFACTURE,DESCRIPTION,35)
