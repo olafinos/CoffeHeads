@@ -10,4 +10,8 @@ class OpinionForm(forms.ModelForm):
         fields = (
             "rating",
             "opinion",
+            "acidity",
+            "body",
+            "flavor",
+            "bitterness"
         )
